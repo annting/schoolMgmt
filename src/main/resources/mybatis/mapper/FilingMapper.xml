@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.anting.dao.FilingMapper">
+  <resultMap id="BaseResultMap" type="com.anting.entity.Filing">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="title" jdbcType="VARCHAR" property="title" />
+    <result column="box_num" jdbcType="INTEGER" property="boxNum" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="filing_type_id" jdbcType="INTEGER" property="filingTypeId" />
+    <result column="time_period" jdbcType="VARCHAR" property="timePeriod" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, title, box_num, remark, filing_type_id, time_period
+  </sql>
+  <select id="selectByById" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_filing
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByById" parameterType="java.lang.Integer">
+    delete from t_filing
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.anting.entity.Filing">
+    <selectKey keyProperty="id" order="BEFORE" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_filing (title, box_num,
+      remark, filing_type_id, time_period
+      )
+    values ( #{title,jdbcType=VARCHAR}, #{boxNum,jdbcType=INTEGER},
+      #{remark,jdbcType=VARCHAR}, #{filingTypeId,jdbcType=INTEGER}, #{timePeriod,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.anting.entity.Filing">
+    <selectKey keyProperty="id" order="BEFORE" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_filing
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      id,
+      <if test="title != null">
+        title,
+      </if>
+      <if test="boxNum != null">
+        box_num,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+      <if test="filingTypeId != null">
+        filing_type_id,
+      </if>
+      <if test="timePeriod != null">
+        time_period,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      #{id,jdbcType=INTEGER},
+      <if test="title != null">
+        #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="boxNum != null">
+        #{boxNum,jdbcType=INTEGER},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="filingTypeId != null">
+        #{filingTypeId,jdbcType=INTEGER},
+      </if>
+      <if test="timePeriod != null">
+        #{timePeriod,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByByIdSelective" parameterType="com.anting.entity.Filing">
+    update t_filing
+    <set>
+      <if test="title != null">
+        title = #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="boxNum != null">
+        box_num = #{boxNum,jdbcType=INTEGER},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="filingTypeId != null">
+        filing_type_id = #{filingTypeId,jdbcType=INTEGER},
+      </if>
+      <if test="timePeriod != null">
+        time_period = #{timePeriod,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByById" parameterType="com.anting.entity.Filing">
+    update t_filing
+    set title = #{title,jdbcType=VARCHAR},
+      box_num = #{boxNum,jdbcType=INTEGER},
+      remark = #{remark,jdbcType=VARCHAR},
+      filing_type_id = #{filingTypeId,jdbcType=INTEGER},
+      time_period = #{timePeriod,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>
